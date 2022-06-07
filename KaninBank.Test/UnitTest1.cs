@@ -1,7 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using KaninBank.Test;
-using System;
-using System.Collections.Generic;
 
 namespace KaninBank.Test
 {
