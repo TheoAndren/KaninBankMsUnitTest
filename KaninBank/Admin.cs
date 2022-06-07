@@ -4,7 +4,7 @@ using System.Text;
 using System.Linq;
 
 
-namespace SUT_Bank21Ver2
+namespace KaninBank
 {
     class Admin : User
     {

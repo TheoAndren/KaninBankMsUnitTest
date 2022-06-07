@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace SUT_Bank21Ver2
+namespace KaninBank
 {
     public class Program
     {

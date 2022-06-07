@@ -1,4 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using KaninBank;
+using System;
+using System.Collections.Generic;
 
 namespace KaninBank.Test
 {
@@ -8,6 +11,7 @@ namespace KaninBank.Test
         [TestMethod]
         public void TestMethod1()
         {
+
         }
     }
 }
