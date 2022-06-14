@@ -1,3 +1,20 @@
 # KaninBankMsUnitTest
 
-WORK IN PROGRESS
+Överföra pengar mellan konton
+
+Måste kolla så att både rätt summa lämnar kontot och att rätt summa kommer in på det nya kontot.
+Kolla så att konton inte kan gå minus, alltså att man kan föra över oändligt mycket pengar till ett konto.
+
+
+Ta ut pengar
+
+Kan ta ut mer pengar än vad som finns tillgängligt på kontot.
+Pengar tas ut men försvinner inte från kontot. 
+Felaktigt amount of money tas ut från kontot. 
+
+
+Låna pengar
+
+Användaren kan ta ut större lån än vad den borde kunna
+Användaren kan inte ta ut lån fast den borde kunna
+Felaktig summa tas ut på lånet
