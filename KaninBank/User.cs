@@ -15,6 +15,7 @@ namespace KaninBank
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public bool IsAdmin { get; set; }
+        public decimal Balance { get; set; }
 
         public string UpdateNotice { get; set; }  //Field with updated time
 

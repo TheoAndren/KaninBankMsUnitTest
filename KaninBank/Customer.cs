@@ -5,10 +5,12 @@ using System.Linq;
 
 namespace KaninBank
 {
-    class Customer : User
+    public class Customer : User
     {
+        private decimal _balance;
+        private bool isnewuseradmin;
 
-        public Customer(int id, string email, string password, string firstname, string lastname, bool isadmin) //Constructor
+        public Customer(int id, string email, string password, string firstname, string lastname, bool isadmin, decimal balance) //Constructor
         {
             Id = id;
             Email = email;
@@ -16,10 +18,22 @@ namespace KaninBank
             Firstname = firstname;
             Lastname = lastname;
             IsAdmin = isadmin;
+            _balance = balance;
         }
         public Customer() //Constructor withoutvalues
         {
         }
+
+        public Customer(int id, string email, string password, string firstname, string lastname, bool isnewuseradmin)
+        {
+            Id = id;
+            Email = email;
+            Password = password;
+            Firstname = firstname;
+            Lastname = lastname;
+            this.isnewuseradmin = isnewuseradmin;
+        }
+
         public void CustomerMenu(int id, List<User> userList, List<Account> accountList)
         {
             //MENU SCREEN
@@ -49,16 +63,16 @@ namespace KaninBank
                             AccountTransferOneUser(id, accountList);
                             break;
                         }
-                    case "4":                                   //Transfer money to diffrent users
+                    case "4":                                   //Withdraw money from account
                         {
                             Console.Clear();
-                            accountList = AccountTransferBetweenUser(id, userList, accountList);
+                            //WithDraw(id, accountList);
                             break;
                         }
                     case "5":                                   //Borrow money
                         {
                             Console.Clear();
-                            AccountLoan(id, accountList);
+                            //AccountLoan(id, accountList);
                             break;
                         }
                     case "6":                                   //Logout
@@ -88,70 +102,134 @@ namespace KaninBank
                 }
             }
         }
-        public List<Account> AccountLoan(int id, List<Account> accountList)
+        public List<decimal> Withdraw(int id, List<Account> accountList, int withdrawFrom, decimal withdrawAmount)
+        {
+            //List<string> accounts = accountList[id].Accounts;
+            List<decimal> balances = accountList[id].Balances;
+            //bool check = true;
+            //int transferFrom = 0,
+            //    transferTo = 0,
+            //    amount = 0;
+            //while (check)
+            //{
+            //    Console.Clear();
+            //    Console.WriteLine("Vilket konto vill du föra över FRÅN? Välj ett konto från listan.");
+            //    for (int i = 0; i < accounts.Count; i++)
+            //    {
+            //        Console.WriteLine($"{i + 1}. {accounts[i]}\t{balances[i]}");
+            //    }
+            //    transferFrom = int.Parse(Console.ReadLine());
+            //    if (transferFrom > accounts.Count || transferFrom == 0)
+            //        Console.WriteLine("Felaktigt val.");
+            //    else
+            //        check = false;
+            //}
+            //check = true;
+            //while (check)
+            //{
+            //    Console.WriteLine("Vilket konto vill du föra över TILL?");
+            //    for (int i = 0; i < accounts.Count; i++)
+            //    {
+            //        Console.WriteLine($"{i + 1}. {accounts[i]}\t{balances[i]}");
+            //    }
+            //    transferTo = int.Parse(Console.ReadLine());
+            //    if (transferTo > accounts.Count || transferTo == 0)
+            //        Console.WriteLine("Felaktigt val.");
+            //    else
+            //        check = false;
+            //}
+            //check = true;
+            //while (check)
+            //{
+            //    Console.WriteLine("Hur mycket vill du föra över?");
+            //    amount = int.Parse(Console.ReadLine());
+            //    if (amount > balances[transferFrom - 1])
+            //        Console.WriteLine("Täckning saknas, försök med ett mindre belopp.");
+            //    else if (amount == 0)
+            //        Console.WriteLine("0 är inte ett giltigt tal.");
+            //    else
+            //        check = false;
+            //}
+
+            balances[withdrawFrom] -= withdrawAmount;
+    
+            return balances;
+
+            //Console.WriteLine($"{amount}kr överfört från {accounts[transferFrom - 1]} till {accounts[transferTo - 1]}.");
+            //Console.WriteLine("\nTryck Enter för att återgå till huvudmenyn.");
+            //Console.ReadKey();
+            //Console.Clear();
+        }
+        public /*List<Account>*/ decimal AccountLoan(int id, List<Account> accountList, decimal loan)
         {
             List<decimal> balances = accountList[id - 2].Balances;
-            List<String> accounts = accountList[id - 2].Accounts;
+            List<string> accounts = accountList[id - 2].Accounts;
             balances.Aggregate((x, y) => x + y);
             decimal assettotals = balances.Aggregate(0m, (current, next) => current + next);
 
-            Console.Clear();
-            Console.WriteLine("Välkommen till låneavdelningen, skriv in summan som du önskar låna.");
-            decimal loanamount = decimal.Parse(Console.ReadLine());
+            //Console.Clear();
+            //Console.WriteLine("Välkommen till låneavdelningen, skriv in summan som du önskar låna.");
+            decimal loanamount = /*decimal.Parse(Console.ReadLine());*/ loan;
             decimal interest = loanamount * 1.15m - loanamount;
-            Console.Clear();
-            Console.WriteLine("Summan som du önskar låna är: {0}kr. Den totala räntan för ditt lån {1}kr. ", loanamount, interest);
-            bool check = true;
-            int transfer = 0;
+            //Console.Clear();
+            //Console.WriteLine("Summan som du önskar låna är: {0}kr. Den totala räntan för ditt lån {1}kr. ", loanamount, interest);
+            //bool check = true;
+            //int transfer = 0;
             decimal maxloan = assettotals * 5;
+            return loanamount;
 
 
 
-            if (maxloan >= loanamount)
-            {
-                Console.Write("Vill du acceptera lånet? [JA/NEJ]");
-                Console.WriteLine("");
-                string input = Console.ReadLine();
+            //if (maxloan >= loanamount)
+            //{
+            //    Console.Write("Vill du acceptera lånet? [JA/NEJ]");
+            //    Console.WriteLine("");
+            //    string input = Console.ReadLine();
 
-                if (input.ToUpper() == "JA")
-                {
-                    while (check)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Vilket konto vill du föra över pengarna till? ");
-                        for (int i = 0; i < accounts.Count; i++)
-                        {
-                            Console.WriteLine($"{i + 1}. {accounts[i]}\t{balances[i]}");
-                        }
-                        transfer = int.Parse(Console.ReadLine());
-                        if (transfer > accounts.Count || transfer == 0)
-                            Console.WriteLine("Felaktigt val.");
-                        else
-                            check = false;
+            //    if (input.ToUpper() == "JA")
+            //    {
+            //        while (check)
+            //        {
+            //            Console.Clear();
+            //            Console.WriteLine("Vilket konto vill du föra över pengarna till? ");
+            //            for (int i = 0; i < accounts.Count; i++)
+            //            {
+            //                Console.WriteLine($"{i + 1}. {accounts[i]}\t{balances[i]}");
+            //            }
+            //            transfer = int.Parse(Console.ReadLine());
+            //            if (transfer > accounts.Count || transfer == 0)
+            //                Console.WriteLine("Felaktigt val.");
+            //            else
+            //                check = false;
 
-                        Console.Clear();
-                        balances[transfer - 1] += loanamount;
-                        Console.WriteLine($"{loanamount}kr överfört. Din nya balans = {balances[transfer - 1]}");
-                        Console.WriteLine("\nTryck Enter för att komma tillbaka till menyn.");
-                        Console.ReadKey();
-                        Console.Clear();
-                    }
-                }
-                else if (input.ToUpper() == "NEJ")
-                {
-                    Console.Clear();
-                    Console.WriteLine("Om du har några andra önskemål så kontakta oss direkt på 072542324 så hjälper vi dig. Ha en bra dag! ");
-                    Console.WriteLine("Tryck Enter för att komma tillbaka till Menyn ");
-                    Console.ReadKey();
-                }
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("Lån godkännes EJ. Försök igen med en mindre summa. ");
-                Console.ReadKey();
-            }
-            return accountList;
+            //            Console.Clear();
+            //            balances[transfer - 1] += loanamount;
+            //            Console.WriteLine($"{loanamount}kr överfört. Din nya balans = {balances[transfer - 1]}");
+            //            Console.WriteLine("\nTryck Enter för att komma tillbaka till menyn.");
+            //            Console.ReadKey();
+            //            Console.Clear();
+            //        }
+            //    }
+            //    else if (input.ToUpper() == "NEJ")
+            //    {
+            //        Console.Clear();
+            //        Console.WriteLine("Om du har några andra önskemål så kontakta oss direkt på 072542324 så hjälper vi dig. Ha en bra dag! ");
+            //        Console.WriteLine("Tryck Enter för att komma tillbaka till Menyn ");
+            //        Console.ReadKey();
+            //    }
+            //}
+            //else
+            //{
+            //    Console.Clear();
+            //    Console.WriteLine("Lån godkännes EJ. Försök igen med en mindre summa. ");
+            //    Console.ReadKey();
+            //}
+            //return accountList;
+        }
+
+        public bool CheckBalanceEnough(decimal checkSum)
+        {
+            return checkSum <= _balance;
         }
 
 
@@ -224,12 +302,62 @@ namespace KaninBank
             Console.ReadKey();
             Console.Clear();
         }
-        public List<Account> AccountTransferBetweenUser(int id, List<User> userlist, List<Account> accountList)
+        public /**/List<decimal> AccountTransferOneUser(int id, List<Account> accountList, int transferFrom, int transferTo, decimal amount)
         {
-            //TBD
-            Console.WriteLine("Function not yet integrated. Click enter to return to the menu");
-            Console.ReadKey();
-            return accountList;
+            //List<string> accounts = accountList[id].Accounts;
+            List<decimal> balances = accountList[id].Balances;
+            //bool check = true;
+            //int transferFrom = 0,
+            //    transferTo = 0,
+            //    amount = 0;
+            //while (check)
+            //{
+            //    Console.Clear();
+            //    Console.WriteLine("Vilket konto vill du föra över FRÅN? Välj ett konto från listan.");
+            //    for (int i = 0; i < accounts.Count; i++)
+            //    {
+            //        Console.WriteLine($"{i + 1}. {accounts[i]}\t{balances[i]}");
+            //    }
+            //    transferFrom = int.Parse(Console.ReadLine());
+            //    if (transferFrom > accounts.Count || transferFrom == 0)
+            //        Console.WriteLine("Felaktigt val.");
+            //    else
+            //        check = false;
+            //}
+            //check = true;
+            //while (check)
+            //{
+            //    Console.WriteLine("Vilket konto vill du föra över TILL?");
+            //    for (int i = 0; i < accounts.Count; i++)
+            //    {
+            //        Console.WriteLine($"{i + 1}. {accounts[i]}\t{balances[i]}");
+            //    }
+            //    transferTo = int.Parse(Console.ReadLine());
+            //    if (transferTo > accounts.Count || transferTo == 0)
+            //        Console.WriteLine("Felaktigt val.");
+            //    else
+            //        check = false;
+            //}
+            //check = true;
+            //while (check)
+            //{
+            //    Console.WriteLine("Hur mycket vill du föra över?");
+            //    amount = int.Parse(Console.ReadLine());
+            //    if (amount > balances[transferFrom - 1])
+            //        Console.WriteLine("Täckning saknas, försök med ett mindre belopp.");
+            //    else if (amount == 0)
+            //        Console.WriteLine("0 är inte ett giltigt tal.");
+            //    else
+            //        check = false;
+            //}
+
+            balances[transferFrom] -= amount;
+            balances[transferTo] += amount;
+            return balances;
+            //Console.WriteLine($"{amount}kr överfört från {accounts[transferFrom - 1]} till {accounts[transferTo - 1]}.");
+            //Console.WriteLine("\nTryck Enter för att återgå till huvudmenyn.");
+            //Console.ReadKey();
+            //Console.Clear();
         }
         public void AccountExhangerate()
         {
